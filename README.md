@@ -1,2 +1,3 @@
 # pp2_22B031181
-TSIS 1 by Karim Madi
+
+TSIS repository for KBTU PP2 lessons.
