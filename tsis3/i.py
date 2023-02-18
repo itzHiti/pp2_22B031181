@@ -1,9 +1,9 @@
-class StringManipulation:
+class StringManipulation:   
     def getString():
         text = input()
         return text
     def printString(self):
-        print(self.s.upper())
+        print(self.upper())
 
 '''
 # Test №1
