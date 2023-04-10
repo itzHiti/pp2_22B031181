@@ -1,6 +1,7 @@
 # Media files taken from "Snake III" game 
 
 import pygame, random, time, sys
+from threading import Timer
 
 pygame.init()
  
@@ -40,6 +41,18 @@ snake_body = [[50, 50],[40, 50]]
 fruit = pygame.transform.scale(pygame.image.load("tsis8/snake/food.png"), (20, 10))
 fruit_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
 fruit_spawn = True
+# fruit2
+fruit2 = pygame.transform.scale(pygame.image.load("tsis8/snake/food2.png"), (20, 10))
+fruit2_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+fruit2_spawn = True
+# fruit3
+fruit3 = pygame.transform.scale(pygame.image.load("tsis8/snake/food3.png"), (20, 10))
+fruit3_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+fruit3_spawn = True
+# fruit4
+fruit4 = pygame.transform.scale(pygame.image.load("tsis8/snake/food4.png"), (20, 10))
+fruit4_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+fruit4_spawn = True
 
 def score(SCORE, LEVEL):
    
@@ -49,7 +62,6 @@ def score(SCORE, LEVEL):
     level_surface = font.render("Level : " + str(LEVEL), True, BLACK)
     
     score_rect = score_surface.get_rect()
-    level_rect = level_surface.get_rect()
 
     DISPLAYSURF.blit(score_surface, score_rect)
     DISPLAYSURF.blit(level_surface, (200, 0))
@@ -69,7 +81,7 @@ def win():
 def game_over():
     DISPLAYSURF.fill(RED)
     font = pygame.font.SysFont("Verdana", 15)
-    game_over_surface = font.render("You lost! Your Score is : " + str(SCORE), True, BLACK)
+    game_over_surface = font.render("You lost! Your Score is: " + str(SCORE), True, BLACK)
     game_over_rect = game_over_surface.get_rect()
     game_over_rect.midtop = (w/2, h/3)
     
@@ -81,6 +93,12 @@ def game_over():
     pygame.quit()
     sys.exit()
 
+def killfood():
+    pygame.draw.rect(DISPLAYSURF, GREEN, (fruit4_pos[0]-7.5, fruit4_pos[1]-7.5, 20, 20))
+    fruit4_spawn = False
+
+LIFETIME = Timer(10 * 60, killfood())
+LIFETIME.start()
 # Game loop
 while True:
 
@@ -118,18 +136,50 @@ while True:
 
     
     snake_body.insert(0, list(snake_pos))
+    
     if snake_pos[0] == fruit_pos[0] and snake_pos[1] == fruit_pos[1]:
         SCORE += 1
         x+=1
         fruit_spawn = False
+        pygame.mixer.Sound("tsis8/snake/newfood.mp3").play()
+    elif snake_pos[0] == fruit2_pos[0] and snake_pos[1] == fruit2_pos[1]:
+        SCORE += 2
+        x+=2
+        fruit2_spawn = False
+        pygame.mixer.Sound("tsis8/snake/newfood.mp3").play()
+    elif snake_pos[0] == fruit3_pos[0] and snake_pos[1] == fruit3_pos[1]:
+        SCORE += 1
+        x+=1
+        fruit3_spawn = False
+        pygame.mixer.Sound("tsis8/snake/newfood.mp3").play()
+    elif snake_pos[0] == fruit4_pos[0] and snake_pos[1] == fruit4_pos[1]:
+        SCORE += 3
+        x+=3
+        fruit4_spawn = False
+        LIFETIME = Timer(10 * 60, killfood())
+        LIFETIME.start()
+        pygame.mixer.Sound("tsis8/snake/newfood.mp3").play()
     else:
         snake_body.pop()
+
     DISPLAYSURF.fill(GREEN)
 
     if not fruit_spawn:
         fruit_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
     fruit_spawn = True	
     DISPLAYSURF.blit(fruit, (fruit_pos[0]-7.5, fruit_pos[1]-7.5))
+    if not fruit2_spawn:
+        fruit2_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+    fruit2_spawn = True	
+    DISPLAYSURF.blit(fruit2, (fruit2_pos[0]-7.5, fruit2_pos[1]-7.5))
+    if not fruit3_spawn:
+        fruit3_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+    fruit3_spawn = True	
+    DISPLAYSURF.blit(fruit3, (fruit3_pos[0]-7.5, fruit3_pos[1]-7.5))
+    if not fruit4_spawn:
+        fruit4_pos = [random.randrange(1, (w//10)) * 10, random.randrange(1, (h//10)) * 10]
+    fruit4_spawn = True	
+    DISPLAYSURF.blit(fruit4, (fruit4_pos[0]-7.5, fruit4_pos[1]-7.5))
     
     for pos in range(len(snake_body)):
         if pos == 0:
@@ -143,8 +193,8 @@ while True:
     if snake_pos[1] < 0 or snake_pos[1] > h-10:
         game_over()
 
-    # 3 fruits => next level + increase speed
-    if x>=3:
+    # 5 fruits => next level + increase speed
+    if x>=5:
         SPEED+=3
         LEVEL+=1
         x=0
