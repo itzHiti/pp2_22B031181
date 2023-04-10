@@ -21,8 +21,12 @@ def main():
     y = 0
     c = 0
 
-    drawrect = 0
+    drawrect = 0 ### if you draw, then == 1
     drawcircle = 0
+    drawsquare = 0
+    drawRightTriangle = 0
+    drawEqualTriangle = 0
+    drawRhombus = 0
 
     isPressed = False
     screen.fill(WHITE)
@@ -58,6 +62,14 @@ def main():
                     drawrect = 1
                 elif event.key == pygame.K_c:
                     drawcircle = 1
+                elif event.key == pygame.K_s:
+                    drawsquare = 1
+                elif event.key == pygame.K_t:
+                    drawRightTriangle = 1
+                elif event.key == pygame.K_y:
+                    drawEquilTriangle = 1
+                elif event.key == pygame.K_u:
+                    drawRhombus = 1
             
             # Eraser and rectangle
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -81,7 +93,8 @@ def main():
             # Eraser 
             elif event.type == pygame.MOUSEBUTTONUP:
                 isPressed = False
-            if event.type == pygame.MOUSEMOTION and isPressed == True and drawrect == drawcircle == 0:         
+
+            if event.type == pygame.MOUSEMOTION and isPressed == True and drawrect == drawcircle == drawsquare == 0:         
                 (x, y) = pygame.mouse.get_pos()   # returns the position of mouse cursor
                 if color == WHITE:
                     pygame.draw.rect(screen, color, (x-20,y-20,40,40))
@@ -97,6 +110,23 @@ def main():
                 (x, y) = pygame.mouse.get_pos()
                 pygame.draw.circle( screen,color, (x, y), 20)
                 drawcircle = 0
+            elif isPressed and drawsquare == 1:  
+                (x, y) = pygame.mouse.get_pos()
+                pygame.draw.rect( screen, color, (x-25, y-25,50,50))
+                drawsquare = 0
+            elif isPressed and drawRightTriangle == 1:  
+                (x, y) = pygame.mouse.get_pos()
+                pygame.draw.polygon(screen, color, [(x, y), (x, y-100), (x+70, y)])
+                drawingRightTriangle = 0
+            elif isPressed and drawEqualTriangle == 1:  
+                (x, y) = pygame.mouse.get_pos()
+                pygame.draw.polygon(screen, color, [(x, y), (x+100, y), (x+50, y-100*math.sqrt(3)//2)])
+                drawEqualTriangle = 0
+            elif isPressed and drawRhombus == 1:  
+                (x, y) = pygame.mouse.get_pos()
+                pygame.draw.polygon(screen, color, [(x, y), (x+100, y), (x+50, y-100*math.sqrt(3)//2)])
+                pygame.draw.polygon(screen, color, [(x, y), (x+100, y), (x+50, y+100*math.sqrt(3)//2)])
+                drawRhombus = 0
 
 
         # Little GUI
