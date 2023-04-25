@@ -4,7 +4,7 @@ import pygame, random, time, sys
 from threading import Timer
 
 pygame.init()
- 
+    
 # Window resolution (HD)
 res = w, h = 700, 700
 
