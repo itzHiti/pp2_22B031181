@@ -29,11 +29,12 @@ x = 0
 conn = psycopg2.connect(database="Snake", user="postgres", password="qwe", host="localhost", port="5432")
 cur = conn.cursor()
 
-# Create tables for PhoneBook
-cur.execute('''CREATE TABLE IF NOT EXISTS users (
+# Create tables for Snake
+cur.execute('''CREATE TABLE IF NOT EXISTS players (
                 id SERIAL PRIMARY KEY,
-                nickname TEXT NOT NULL,
-                score TEXT NOT NULL)''')
+                username TEXT NOT NULL,
+                score TEXT NOT NULL,
+                level TEXT NOT NULL)''')
 
 # Creating a green screen and caption of game
 pygame.display.set_caption("Snakes III?")
@@ -100,6 +101,16 @@ def game_over():
     pygame.display.flip()
 
     time.sleep(6)
+    name = input("Enter you nickname to register you: ")
+    cur.execute("SELECT * FROM players WHERE {} = %s", (name))
+    players = cur.fetchall()
+    print(players)
+    if len(players) == 0:
+        cur.execute("INSERT INTO players (username, score, level) VALUES (%s, %s, %s)", (name, SCORE, LEVEL))
+    else:
+        cur.execute("UPDATE players SET (score, level) VALUES (%s,%s) WHERE username = %s", (SCORE, LEVEL, name))
+    conn.commit()
+
     pygame.quit()
     sys.exit()
 
@@ -114,9 +125,10 @@ cur.execute("SELECT * FROM players WHERE {} = %s", (username))
 players = cur.fetchall()
 print(players)
 if len(players) == 0:
-  	print("Sign up in the system")
+  	print("Sign up in the system after game")
 else:
-	SCORE = players[0][1]
+    print("Welcome back!")
+    SCORE = players[0][1]
     LEVEL = players[0][2]
 
 # Game loop
@@ -222,9 +234,9 @@ while True:
         x=0
         win()
     score(SCORE, LEVEL)
-
-    conn.commit()
-	cur.close()
+    
+    cur.close()
+    conn.close()
 
     pygame.display.update()
     FramePerSec.tick(FPS)
