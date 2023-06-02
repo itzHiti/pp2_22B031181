@@ -1,0 +1,3 @@
+psql -U postgres -d phonebook2 -h localhost -p 5432
+
+\i task.sql

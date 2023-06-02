@@ -19,6 +19,7 @@ cur.execute('''CREATE TABLE IF NOT EXISTS users (
 def insert_from_csv(filename):
     with open("tsis10/"+filename, 'r') as file:
         reader = csv.reader(file)
+
         next(reader) # Skip header row
         for row in reader:
             cur.execute("INSERT INTO users (firstname, lastname, phone) VALUES (%s, %s, %s)", row)
@@ -203,5 +204,5 @@ while True:
             sys.exit()
         case _:
             val = ("""
-            Choose number from 1 to 5
+            Choose number from 1 to 10
             """)

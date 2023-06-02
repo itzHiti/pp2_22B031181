@@ -102,7 +102,7 @@ def game_over():
 
     time.sleep(6)
     name = input("Enter you nickname to register you: ")
-    cur.execute("SELECT * FROM players WHERE {} = %s", (name))
+    cur.execute("SELECT * FROM players WHERE username = %s", (name))
     players = cur.fetchall()
     print(players)
     if len(players) == 0:
@@ -121,7 +121,7 @@ LIFETIME = Timer(10, killfood)
 LIFETIME.start()
 
 username = input("Enter your name: ")
-cur.execute("SELECT * FROM players WHERE {} = %s", (username))
+cur.execute("SELECT * FROM players WHERE username = %s", (username))
 players = cur.fetchall()
 print(players)
 if len(players) == 0:
